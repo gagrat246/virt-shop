@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLACK RUSSIA | Вирты</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px;
+      margin: 0;
+      background-color: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #000000);
+    }
+    h2 { margin-top: 0; font-size: 20px; }
+    label { display: block; margin-top: 14px; font-weight: 600; font-size: 14px; }
+    select, input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--tg-theme-hint-color, #ccc);
+      background-color: var(--tg-theme-secondary-bg-color, #f5f5f5);
+      color: var(--tg-theme-text-color, #000000);
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: var(--tg-theme-button-color, #2481cc);
+      color: var(--tg-theme-button-text-color, #ffffff);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .total { margin-top: 16px; font-size: 17px; font-weight: 600; }
+    .hint { font-size: 12px; color: var(--tg-theme-hint-color, #777); margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h2>BLACK RUSSIA | Покупка виртов</h2>
+
+  <label for="server">Сервер</label>
+  <select id="server"></select>
+
+  <label for="amount">Количество (млн виртов)</label>
+  <input type="number" id="amount" value="5" min="0.5" step="0.5" />
+
+  <label for="nick">Игровой никнейм</label>
+  <input type="text" id="nick" placeholder="Ivan_Ivanov" />
+
+  <label for="bank">Банковский счет в игре</label>
+  <input type="text" id="bank" placeholder="Номер и название счета" />
+
+  <div class="total">Примерно к оплате: <span id="total">375</span> руб.</div>
+  <div class="hint">Точная цена (с учетом вашей скидки и цены сервера) рассчитается в боте.</div>
+
+  <button id="submitBtn">Перейти к оплате</button>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    const servers = [
+      "RED", "GREEN", "BLUE", "YELLOW", "ORANGE", "PURPLE", "LIME", "PINK", "CHERRY", "BLACK",
+      "INDIGO", "WHITE", "MAGENTA", "CRIMSON", "GOLD", "AZURE", "PLATINUM", "AQUA", "GRAY", "ICE",
+      "CHILLI", "CHOCO", "MOSCOW", "SPB", "UFA", "SOCHI", "KAZAN", "SAMARA", "ROSTOV", "ANAPA",
+      "EKB", "KRASNODAR", "ARZAMAS", "NOVOSIBIRSK", "GROZNY", "SARATOV", "OMSK", "IRKUTSK", "VOLGOGRAD", "VORONEZH",
+      "BELGOROD", "MAKHACHKALA", "VLADIKAVKAZ", "VLADIVOSTOK", "KALININGRAD", "CHELYABINSK", "KRASNOYARSK", "CHEBOKSARY", "KHABAROVSK", "PERM",
+      "TULA", "RYAZAN", "MURMANSK", "PENZA", "KURSK", "ARKHANGELSK", "ORENBURG", "KIROV", "KEMEROVO", "TYUMEN",
+      "TOLYATTI", "IVANOVO", "STAVROPOL", "SMOLENSK", "PSKOV", "BRYANSK", "OREL", "YAROSLAVL", "BARNAUL", "LIPETSK",
+      "ULYANOVSK", "YAKUTSK", "TAMBOV", "BRATSK", "ASTRAKHAN", "CHITA", "KOSTROMA", "VLADIMIR", "KALUGA", "N.NOVGOROD",
+      "TAGANROG", "VOLOGDA", "TVER", "TOMSK", "IZHEVSK", "SURGUT", "PODOLSK", "MAGADAN", "CHEREPOVETS", "NORILSK",
+      "ASTANA", "TASHKENT"
+    ];
+
+    const selectEl = document.getElementById("server");
+    servers.forEach((name, idx) => {
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = "#" + (idx + 1) + " " + name;
+      selectEl.appendChild(opt);
+    });
+
+    const defaultPrice = 75;
+    const amountInput = document.getElementById("amount");
+    const totalSpan = document.getElementById("total");
+
+    function updateTotal() {
+      const val = parseFloat(amountInput.value) || 0;
+      totalSpan.textContent = Math.max(0, Math.round(val * defaultPrice));
+    }
+    amountInput.addEventListener("input", updateTotal);
+
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const server = selectEl.value;
+      const amount = parseFloat(amountInput.value) || 0;
+      const nick = document.getElementById("nick").value.trim();
+      const bank = document.getElementById("bank").value.trim();
+
+      if (amount <= 0 || nick.length < 3 || bank.length < 2) {
+        tg.showAlert("Заполните количество, игровой ник и банковский счет.");
+        return;
+      }
+
+      tg.sendData(JSON.stringify({
+        server: server,
+        amount_kk: amount,
+        nick: nick,
+        bank: bank
+      }));
+    });
+  </script>
+</body>
+</html>
