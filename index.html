@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>BLACK RUSSIA | Магазин</title>
+  <title>Lolovpordora | BLACK RUSSIA</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: var(--tg-theme-bg-color, #0f1115);
-      --sec-bg: var(--tg-theme-secondary-bg-color, #181b22);
-      --text: var(--tg-theme-text-color, #ffffff);
-      --hint: var(--tg-theme-hint-color, #8e96a4);
-      --btn: var(--tg-theme-button-color, #2ea6ff);
-      --btn-text: var(--tg-theme-button-text-color, #ffffff);
-      --border: rgba(128, 128, 128, 0.18);
+      --bg: #09070f;
+      --card: #130f21;
+      --input-bg: #0c0916;
+      --text: #f5f3ff;
+      --hint: #9f96b8;
+      --accent: #7c3aed;
+      --accent-bright: #a855f7;
+      --accent-glow: rgba(139, 92, 246, 0.35);
+      --border: rgba(167, 139, 250, 0.16);
+      --green: #22c55e;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -24,35 +27,86 @@
       background-color: var(--bg);
       color: var(--text);
       padding-top: calc(var(--tg-safe-area-inset-top, 0px) + var(--tg-content-safe-area-inset-top, 0px) + 12px);
-      padding-bottom: calc(var(--tg-safe-area-inset-bottom, 0px) + 84px);
+      padding-bottom: calc(var(--tg-safe-area-inset-bottom, 0px) + 88px);
       padding-left: 16px;
       padding-right: 16px;
       min-height: 100vh;
     }
 
-    .header {
+    /* Анимированный баннер Lolovpordora */
+    .hero-banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      padding: 18px 16px;
+      margin-bottom: 14px;
+      background: linear-gradient(125deg, #1b1035, #3b176b, #231145, #140b29);
+      background-size: 250% 250%;
+      animation: bannerShift 7s ease infinite;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 8px 28px rgba(124, 58, 237, 0.22);
+    }
+    @keyframes bannerShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -30px;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.38), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
     }
-    .brand {
-      font-size: 18px;
+    .brand-name {
+      font-size: 22px;
       font-weight: 800;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
+      background: linear-gradient(90deg, #ffffff, #d8b4fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .brand span { color: var(--btn); }
     .user-pill {
       font-size: 12px;
-      padding: 6px 10px;
+      padding: 5px 10px;
       border-radius: 20px;
-      background: var(--sec-bg);
-      color: var(--hint);
-      border: 1px solid var(--border);
+      background: rgba(9, 7, 15, 0.55);
+      color: #e9d5ff;
+      border: 1px solid rgba(192, 132, 252, 0.3);
+    }
+    .hero-sub {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #ddd6fe;
+      position: relative;
+      z-index: 1;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      margin-right: 6px;
     }
 
     .card {
-      background: var(--sec-bg);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 14px;
@@ -63,66 +117,231 @@
       font-size: 13px;
       font-weight: 600;
       color: var(--hint);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: block;
     }
 
-    input, select {
+    input[type="text"], input[type="number"], select {
       width: 100%;
       padding: 12px 14px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--input-bg);
       color: var(--text);
       font-size: 15px;
       outline: none;
     }
     input:focus, select:focus {
-      border-color: var(--btn);
+      border-color: var(--accent-bright);
+    }
+
+    .quick-servers {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .srv-pill {
+      padding: 7px 11px;
+      border-radius: 10px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .srv-pill.fav-pill {
+      border-color: rgba(192, 132, 252, 0.45);
+      color: #e9d5ff;
+    }
+    .srv-pill.active {
+      background: rgba(124, 58, 237, 0.28);
+      border-color: var(--accent-bright);
+      color: #ffffff;
     }
 
     .search-box { margin-bottom: 8px; }
 
-    .chips {
+    .server-row {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
+      align-items: center;
+    }
+    .server-row select { flex: 1; }
+    .fav-btn {
+      width: 46px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--hint);
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .fav-btn.is-fav {
+      border-color: var(--accent-bright);
+      color: #d8b4fe;
+      background: rgba(124, 58, 237, 0.22);
+    }
+
+    /* Пакеты 25-100 млн */
+    .packs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .pack-card {
+      position: relative;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .pack-card.active {
+      border-color: var(--accent-bright);
+      background: rgba(124, 58, 237, 0.22);
+      box-shadow: 0 0 14px rgba(139, 92, 246, 0.18);
+    }
+    .pack-title { font-size: 15px; font-weight: 700; }
+    .pack-sub { font-size: 12px; color: var(--hint); margin-top: 2px; }
+    .pack-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    /* Слайдер */
+    .slider-wrap {
+      margin: 10px 0 12px;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-bright);
+      cursor: pointer;
+      height: 6px;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--hint);
+      margin-top: 4px;
+    }
+
+    .pay-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
       margin-top: 10px;
     }
-    .chip {
-      flex: 1;
-      min-width: 54px;
-      padding: 9px 6px;
-      border-radius: 10px;
+    .pay-opt {
+      padding: 11px 8px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
+      background: var(--input-bg);
+      color: var(--hint);
       font-size: 13px;
       font-weight: 600;
       text-align: center;
       cursor: pointer;
     }
-    .chip.active {
-      background: var(--btn);
-      color: var(--btn-text);
-      border-color: var(--btn);
+    .pay-opt.active {
+      border-color: var(--accent-bright);
+      background: rgba(124, 58, 237, 0.24);
+      color: #ffffff;
     }
 
     .summary-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     .summary-price {
       font-size: 22px;
       font-weight: 800;
-      color: var(--btn);
+      color: #d8b4fe;
     }
+    .priority-tag {
+      display: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: #e9d5ff;
+      background: rgba(124, 58, 237, 0.25);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      padding: 6px 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .priority-tag.show { display: block; }
     .hint-small {
       font-size: 12px;
       color: var(--hint);
       line-height: 1.4;
+    }
+
+    /* Блок доверия и чекбокс */
+    .trust-block {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.16), rgba(20, 15, 34, 0.9));
+      border: 1px solid rgba(168, 85, 247, 0.32);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    .trust-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .trust-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .mini-link-btn {
+      padding: 9px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: #e9d5ff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      accent-color: var(--accent-bright);
+      flex-shrink: 0;
     }
 
     .primary-btn {
@@ -130,21 +349,21 @@
       padding: 15px;
       border-radius: 14px;
       border: none;
-      background: var(--btn);
-      color: var(--btn-text);
+      background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+      color: #ffffff;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 6px;
+      box-shadow: 0 6px 20px var(--accent-glow);
     }
-    .primary-btn:active { opacity: 0.85; }
+    .primary-btn:active { opacity: 0.88; }
 
     .secondary-btn {
       width: 100%;
       padding: 13px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--input-bg);
       color: var(--text);
       font-size: 14px;
       font-weight: 600;
@@ -162,18 +381,20 @@
       line-height: 1.45;
     }
     .step-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .step-title { font-weight: 700; margin-bottom: 2px; }
+    .step-title { font-weight: 700; margin-bottom: 3px; color: #e9d5ff; }
 
+    /* Нижняя навигация */
     .bottom-nav {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--sec-bg);
+      background: rgba(19, 15, 33, 0.96);
+      backdrop-filter: blur(12px);
       border-top: 1px solid var(--border);
       display: flex;
-      padding: 8px 12px calc(var(--tg-safe-area-inset-bottom, 0px) + 8px);
-      gap: 8px;
+      padding: 8px 10px calc(var(--tg-safe-area-inset-bottom, 0px) + 8px);
+      gap: 6px;
       z-index: 100;
     }
     .nav-btn {
@@ -183,105 +404,248 @@
       border: none;
       background: transparent;
       color: var(--hint);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
     .nav-btn.active {
-      background: var(--bg);
-      color: var(--btn);
+      background: rgba(124, 58, 237, 0.22);
+      color: #e9d5ff;
+    }
+
+    /* Модальное окно подтверждения */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 4, 10, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--card);
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 12px; }
+    .modal-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .modal-row span:first-child { color: var(--hint); }
+    .modal-row span:last-child { font-weight: 600; text-align: right; }
+    .modal-btns {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 8px;
+      margin-top: 16px;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="brand">BLACK RUSSIA <span>ВИРТЫ</span></div>
-    <div class="user-pill" id="userBadge">Гость</div>
+  <!-- Фирменный баннер Lolovpordora -->
+  <div class="hero-banner">
+    <div class="hero-top">
+      <div class="brand-name">Lolovpordora</div>
+      <div class="user-pill" id="userBadge">Игрок</div>
+    </div>
+    <div class="hero-sub">
+      <div><span class="status-dot"></span>Онлайн выдача: <b>5–15 мин</b></div>
+      <div>92 сервера Black Russia</div>
+    </div>
   </div>
 
   <!-- Вкладка 1: Магазин -->
   <div id="tab-shop" class="tab-page active">
     <div class="card">
-      <span class="label">1. Выберите сервер</span>
-      <input type="text" id="serverSearch" class="search-box" placeholder="Поиск сервера (например: MOSCOW или 23)..." />
-      <select id="server"></select>
-    </div>
-
-    <div class="card">
-      <span class="label">2. Количество виртов (млн)</span>
-      <input type="number" id="amount" value="5" min="0.5" step="0.5" />
-      <div class="chips" id="amountChips">
-        <div class="chip" data-val="1">1 млн</div>
-        <div class="chip active" data-val="5">5 млн</div>
-        <div class="chip" data-val="10">10 млн</div>
-        <div class="chip" data-val="25">25 млн</div>
-        <div class="chip" data-val="50">50 млн</div>
+      <span class="label">1. Сервер (нажмите звезду, чтобы закрепить свой)</span>
+      <div class="quick-servers" id="quickServers"></div>
+      <input type="text" id="serverSearch" class="search-box" placeholder="Поиск по 92 серверам (имя или номер)..." />
+      <div class="server-row">
+        <select id="server"></select>
+        <button type="button" class="fav-btn" id="favBtn" title="Закрепить сервер">☆</button>
       </div>
     </div>
 
     <div class="card">
-      <span class="label">3. Данные для перевода</span>
-      <input type="text" id="nick" placeholder="Игровой ник (Ivan_Ivanov)" style="margin-bottom: 10px;" />
-      <input type="text" id="bank" placeholder="Номер и название счета в игре" />
+      <span class="label">2. Выберите пакет или настройте сумму</span>
+      <div class="packs-grid" id="packGrid">
+        <div class="pack-card active" data-val="25">
+          <div class="pack-title">25 млн</div>
+          <div class="pack-sub">~1875 руб.</div>
+        </div>
+        <div class="pack-card" data-val="50">
+          <span class="pack-badge">ХИТ</span>
+          <div class="pack-title">50 млн</div>
+          <div class="pack-sub">~3750 руб.</div>
+        </div>
+        <div class="pack-card" data-val="75">
+          <div class="pack-title">75 млн</div>
+          <div class="pack-sub">~5625 руб.</div>
+        </div>
+        <div class="pack-card" data-val="100">
+          <span class="pack-badge">ВЫГОДНО</span>
+          <div class="pack-title">100 млн</div>
+          <div class="pack-sub">~7500 руб.</div>
+        </div>
+      </div>
+
+      <div class="slider-wrap">
+        <input type="range" id="amountSlider" min="1" max="100" step="1" value="25" />
+        <div class="slider-labels">
+          <span>1 млн</span>
+          <span>25 млн</span>
+          <span>50 млн</span>
+          <span>75 млн</span>
+          <span>100 млн</span>
+        </div>
+      </div>
+
+      <input type="number" id="amount" value="25" min="0.5" step="0.5" placeholder="Любое количество (млн)" />
     </div>
 
     <div class="card">
+      <span class="label">3. Игровые данные (сохранятся на будущее)</span>
+      <input type="text" id="nick" placeholder="Игровой ник (например: Ivan_Ivanov)" style="margin-bottom: 10px;" />
+      <input type="text" id="bank" placeholder="Номер и название банковского счета" />
+    </div>
+
+    <div class="card">
+      <span class="label">4. Промокод и способ оплаты</span>
+      <input type="text" id="promo" placeholder="Промокод (если есть)" />
+      <div class="pay-toggle" id="payToggle">
+        <div class="pay-opt active" data-pay="card">Переводом по карте</div>
+        <div class="pay-opt" data-pay="balance">Оплатить с баланса</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="priority-tag" id="priorityBadge">Приоритетная выдача без очереди (заказ от 50 млн)</div>
       <div class="summary-row">
         <span style="font-weight: 600;">Итого ориентировочно:</span>
-        <span class="summary-price"><span id="total">375</span> руб.</span>
+        <span class="summary-price"><span id="total">1875</span> руб.</span>
       </div>
-      <div class="hint-small">Точная сумма с учетом вашей скидки, баланса и цены сервера посчитается при подтверждении в боте.</div>
+      <div class="hint-small">Промокод, ваша скидка и актуальная цена выбранного сервера автоматически применятся в боте.</div>
     </div>
+
+    <div class="trust-block">
+      <div class="trust-top">
+        <span><span class="status-dot"></span>Среднее время выдачи: <b>5–15 мин</b></span>
+      </div>
+      <div class="trust-actions">
+        <button type="button" class="mini-link-btn" id="reviewsBtn">Отзывы в боте</button>
+        <button type="button" class="mini-link-btn" id="playerokBtn">Наш Playerok</button>
+      </div>
+    </div>
+
+    <label class="check-row">
+      <input type="checkbox" id="confirmCheck" />
+      <span>Я проверил правильность сервера, игрового ника и номера банковского счета</span>
+    </label>
 
     <button class="primary-btn" id="submitBtn">Оформить заказ</button>
   </div>
 
-  <!-- Вкладка 2: Инструкция -->
+  <!-- Вкладка 2: Бонусы и рефералы -->
+  <div id="tab-bonus" class="tab-page">
+    <div class="card">
+      <div class="step-item">
+        <div class="step-title">Ежедневный бонус</div>
+        Заходите в бота каждый день и нажимайте кнопку «Бонусы» в главном меню, чтобы получать рубли на внутренний баланс магазина.
+      </div>
+      <div class="step-item">
+        <div class="step-title">Пригласи друга</div>
+        Отправьте другу личную ссылку из раздела «Реферальная система» в боте. Как только он купит от 5 млн виртов, вам автоматически начислится бонус на баланс.
+      </div>
+      <button class="primary-btn" id="shareRefBtn" style="margin-top: 14px;">Пригласить друга</button>
+    </div>
+  </div>
+
+  <!-- Вкладка 3: Как купить -->
   <div id="tab-info" class="tab-page">
     <div class="card">
       <div class="step-item">
+        <div class="step-title">Как узнать номер банковского счета в игре</div>
+        Зайдите в отделение банка в Black Russia (или откройте меню банка в телефоне), выберите пункт управления счетами и посмотрите точный номер и название вашего счета. Не путайте его с реальной банковской картой.
+      </div>
+      <div class="step-item">
         <div class="step-title">1. Заполните заявку</div>
-        Выберите свой сервер, укажите сумму виртов, точный игровой ник и банковский счет.
+        Выберите сервер, сумму виртов, укажите игровой ник и счет. Данные сохранятся для следующих заказов.
       </div>
       <div class="step-item">
-        <div class="step-title">2. Выберите оплату в боте</div>
-        После нажатия кнопки оформления откроется чат с ботом: можно списать с внутреннего баланса или оплатить переводом по реквизитам.
+        <div class="step-title">2. Оплата заказа</div>
+        После подтверждения бот выдаст реквизиты для перевода или предложит списать сумму с внутреннего баланса.
       </div>
       <div class="step-item">
-        <div class="step-title">3. Получите вирты</div>
-        Администратор проверит оплату и переведет вирты на ваш игровой счет. Уведомление придет прямо в Telegram.
+        <div class="step-title">3. Получение виртов</div>
+        Администратор проверит оплату и переведет вирты за 5–15 минут.
+        <button class="secondary-btn" id="reviewsBtnTab">Посмотреть отзывы в боте</button>
       </div>
     </div>
   </div>
 
-  <!-- Вкладка 3: Поддержка -->
+  <!-- Вкладка 4: Поддержка -->
   <div id="tab-support" class="tab-page">
     <div class="card">
-      <span class="label">Прямая связь с администраторами</span>
+      <span class="label">Связь и официальные площадки</span>
       <div class="hint-small" style="margin-bottom: 10px;">
-        Если возник вопрос по оплате, заказу или возврату, напишите напрямую в Telegram:
+        По всем вопросам по заказам, чекам и сотрудничеству пишите напрямую администраторам:
       </div>
       <button class="secondary-btn" onclick="openTg('https://t.me/isyshristos22')">Написать @isyshristos22</button>
       <button class="secondary-btn" onclick="openTg('https://t.me/Nameost')">Написать @Nameost</button>
+      <button class="secondary-btn" id="playerokBtnSup" style="border-color: rgba(168, 85, 247, 0.45); color: #e9d5ff;">Перейти в наш магазин на Playerok</button>
     </div>
   </div>
 
   <div class="bottom-nav">
     <button class="nav-btn active" data-tab="tab-shop">Магазин</button>
+    <button class="nav-btn" data-tab="tab-bonus">Бонусы</button>
     <button class="nav-btn" data-tab="tab-info">Как купить</button>
     <button class="nav-btn" data-tab="tab-support">Поддержка</button>
   </div>
 
+  <!-- Модальное окно проверки заказа -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-card">
+      <div class="modal-title">Проверьте ваш заказ</div>
+      <div class="modal-row"><span>Сервер</span><span id="mServer">-</span></div>
+      <div class="modal-row"><span>Сумма виртов</span><span id="mAmount">-</span></div>
+      <div class="modal-row"><span>Игровой ник</span><span id="mNick">-</span></div>
+      <div class="modal-row"><span>Счет в игре</span><span id="mBank">-</span></div>
+      <div class="modal-row"><span>Промокод</span><span id="mPromo">-</span></div>
+      <div class="modal-row"><span>Оплата</span><span id="mPay">-</span></div>
+      <div class="modal-row" style="border-bottom: none;"><span>Ориентировочно</span><span id="mTotal" style="color: #d8b4fe;">-</span></div>
+      <div class="modal-btns">
+        <button type="button" class="secondary-btn" id="modalCancel" style="margin-top: 0;">Изменить</button>
+        <button type="button" class="primary-btn" id="modalConfirm" style="padding: 13px; font-size: 14px;">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // ВСТАВЬТЕ ВАШИ ДАННЫЕ ЗДЕСЬ:
+    const PLAYEROK_URL = "https://playerok.com/";
+    const BOT_USERNAME = "ВАШ_ЮЗЕРНЕЙМ_БОТА";
+
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
     try {
-      if (typeof tg.requestFullscreen === "function") {
-        tg.requestFullscreen();
-      }
+      if (typeof tg.requestFullscreen === "function") tg.requestFullscreen();
+      if (typeof tg.setHeaderColor === "function") tg.setHeaderColor("#09070f");
+      if (typeof tg.setBackgroundColor === "function") tg.setBackgroundColor("#09070f");
     } catch (e) {}
 
     const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
@@ -295,6 +659,15 @@
       } catch (e) {}
     }
 
+    function openExternal(url) {
+      haptic();
+      if (typeof tg.openLink === "function") {
+        tg.openLink(url);
+      } else {
+        window.open(url, "_blank");
+      }
+    }
+
     function openTg(url) {
       haptic();
       if (typeof tg.openTelegramLink === "function") {
@@ -304,7 +677,25 @@
       }
     }
 
-    // Переключение вкладок
+    document.getElementById("playerokBtn").addEventListener("click", () => openExternal(PLAYEROK_URL));
+    document.getElementById("playerokBtnSup").addEventListener("click", () => openExternal(PLAYEROK_URL));
+
+    function openReviewsInBot() {
+      haptic();
+      tg.sendData(JSON.stringify({ action: "reviews" }));
+    }
+    document.getElementById("reviewsBtn").addEventListener("click", openReviewsInBot);
+    document.getElementById("reviewsBtnTab").addEventListener("click", openReviewsInBot);
+
+    document.getElementById("shareRefBtn").addEventListener("click", () => {
+      haptic();
+      const uid = user ? user.id : "";
+      const refUrl = "https://t.me/" + BOT_USERNAME + "?start=ref_" + uid;
+      const shareText = "Покупай вирты в Black Russia выгодно и быстро в Lolovpordora!";
+      openTg("https://t.me/share/url?url=" + encodeURIComponent(refUrl) + "&text=" + encodeURIComponent(shareText));
+    });
+
+    // Вкладки
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         haptic();
@@ -315,7 +706,7 @@
       });
     });
 
-    // Серверы и поиск
+    // Серверы, избранное и автосохранение
     const servers = [
       "RED", "GREEN", "BLUE", "YELLOW", "ORANGE", "PURPLE", "LIME", "PINK", "CHERRY", "BLACK",
       "INDIGO", "WHITE", "MAGENTA", "CRIMSON", "GOLD", "AZURE", "PLATINUM", "AQUA", "GRAY", "ICE",
@@ -329,12 +720,54 @@
       "ASTANA", "TASHKENT"
     ];
 
+    const baseQuick = ["RED", "MOSCOW", "SPB", "KAZAN", "BLUE"];
     const selectEl = document.getElementById("server");
     const searchEl = document.getElementById("serverSearch");
+    const quickWrap = document.getElementById("quickServers");
+    const favBtn = document.getElementById("favBtn");
+    const nickInput = document.getElementById("nick");
+    const bankInput = document.getElementById("bank");
+
+    function getStorage(key, def = "") {
+      try { return localStorage.getItem(key) || def; } catch (e) { return def; }
+    }
+    function setStorage(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    let favServer = getStorage("lolov_fav_srv");
+
+    function renderQuickPills() {
+      quickWrap.innerHTML = "";
+      const list = favServer ? [favServer, ...baseQuick.filter((s) => s !== favServer)] : baseQuick;
+      list.forEach((srv) => {
+        const pill = document.createElement("div");
+        const isFav = srv === favServer;
+        pill.className = "srv-pill" + (isFav ? " fav-pill" : "") + (selectEl.value === srv ? " active" : "");
+        pill.textContent = isFav ? "★ " + srv : srv;
+        pill.addEventListener("click", () => {
+          haptic();
+          searchEl.value = "";
+          renderServers("");
+          selectEl.value = srv;
+          setStorage("lolov_last_srv", srv);
+          syncFavAndPills();
+        });
+        quickWrap.appendChild(pill);
+      });
+    }
+
+    function syncFavAndPills() {
+      const cur = selectEl.value;
+      const isFav = cur === favServer;
+      favBtn.textContent = isFav ? "★" : "☆";
+      favBtn.classList.toggle("is-fav", isFav);
+      renderQuickPills();
+    }
 
     function renderServers(filterText = "") {
       const q = filterText.trim().toLowerCase();
-      const currentVal = selectEl.value;
+      const currentVal = selectEl.value || getStorage("lolov_last_srv") || favServer || "RED";
       selectEl.innerHTML = "";
 
       servers.forEach((name, idx) => {
@@ -350,57 +783,135 @@
       if (currentVal && Array.from(selectEl.options).some((o) => o.value === currentVal)) {
         selectEl.value = currentVal;
       }
+      syncFavAndPills();
     }
 
-    renderServers();
+    favBtn.addEventListener("click", () => {
+      haptic();
+      const cur = selectEl.value;
+      if (!cur) return;
+      favServer = favServer === cur ? "" : cur;
+      setStorage("lolov_fav_srv", favServer);
+      syncFavAndPills();
+    });
+
+    selectEl.addEventListener("change", () => {
+      setStorage("lolov_last_srv", selectEl.value);
+      syncFavAndPills();
+    });
     searchEl.addEventListener("input", () => renderServers(searchEl.value));
 
-    // Калькулятор и быстрые суммы
+    // Восстановление ника и счета
+    nickInput.value = getStorage("lolov_nick");
+    bankInput.value = getStorage("lolov_bank");
+    nickInput.addEventListener("input", () => setStorage("lolov_nick", nickInput.value));
+    bankInput.addEventListener("input", () => setStorage("lolov_bank", bankInput.value));
+
+    renderServers();
+
+    // Пакеты, слайдер и цена
     const defaultPrice = 75;
     const amountInput = document.getElementById("amount");
+    const slider = document.getElementById("amountSlider");
     const totalSpan = document.getElementById("total");
-    const chips = document.querySelectorAll(".chip");
+    const packCards = document.querySelectorAll(".pack-card");
+    const priorityBadge = document.getElementById("priorityBadge");
 
-    function updateTotal() {
-      const val = parseFloat(amountInput.value) || 0;
+    function updateTotal(fromSlider = false) {
+      let val = fromSlider ? parseFloat(slider.value) : (parseFloat(amountInput.value) || 0);
+      if (fromSlider) amountInput.value = val;
+      else slider.value = Math.min(100, Math.max(1, val));
+
       totalSpan.textContent = Math.max(0, Math.round(val * defaultPrice));
-      chips.forEach((c) => {
+      priorityBadge.classList.toggle("show", val >= 50);
+
+      packCards.forEach((c) => {
         c.classList.toggle("active", parseFloat(c.dataset.val) === val);
       });
     }
 
-    amountInput.addEventListener("input", updateTotal);
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
+    amountInput.addEventListener("input", () => updateTotal(false));
+    slider.addEventListener("input", () => updateTotal(true));
+    packCards.forEach((card) => {
+      card.addEventListener("click", () => {
         haptic();
-        amountInput.value = chip.dataset.val;
-        updateTotal();
+        amountInput.value = card.dataset.val;
+        updateTotal(false);
       });
     });
 
-    // Отправка заказа
+    // Способ оплаты
+    let payMethod = "card";
+    const payOpts = document.querySelectorAll(".pay-opt");
+    payOpts.forEach((opt) => {
+      opt.addEventListener("click", () => {
+        haptic();
+        payMethod = opt.dataset.pay;
+        payOpts.forEach((o) => o.classList.remove("active"));
+        opt.classList.add("active");
+      });
+    });
+
+    // Модальное окно проверки заказа
+    const modal = document.getElementById("confirmModal");
+    let pendingPayload = null;
+
     document.getElementById("submitBtn").addEventListener("click", () => {
       haptic();
       const server = selectEl.value;
       const amount = parseFloat(amountInput.value) || 0;
-      const nick = document.getElementById("nick").value.trim();
-      const bank = document.getElementById("bank").value.trim();
+      const nick = nickInput.value.trim();
+      const bank = bankInput.value.trim();
+      const promo = document.getElementById("promo").value.trim().toUpperCase();
+      const checked = document.getElementById("confirmCheck").checked;
 
       if (!server) {
         tg.showAlert("Выберите сервер из списка.");
         return;
       }
       if (amount <= 0 || nick.length < 3 || bank.length < 2) {
-        tg.showAlert("Укажите количество, игровой ник и банковский счет.");
+        tg.showAlert("Укажите количество виртов, игровой ник и банковский счет.");
+        return;
+      }
+      if (!checked) {
+        tg.showAlert("Поставьте галочку, что проверили сервер, ник и номер счета.");
         return;
       }
 
-      tg.sendData(JSON.stringify({
+      setStorage("lolov_last_srv", server);
+      setStorage("lolov_nick", nick);
+      setStorage("lolov_bank", bank);
+
+      pendingPayload = {
+        action: "order",
         server: server,
         amount_kk: amount,
         nick: nick,
-        bank: bank
-      }));
+        bank: bank,
+        promo: promo,
+        pay_method: payMethod
+      };
+
+      document.getElementById("mServer").textContent = server;
+      document.getElementById("mAmount").textContent = amount + " млн";
+      document.getElementById("mNick").textContent = nick;
+      document.getElementById("mBank").textContent = bank;
+      document.getElementById("mPromo").textContent = promo || "Нет";
+      document.getElementById("mPay").textContent = payMethod === "card" ? "Перевод по карте" : "С баланса бота";
+      document.getElementById("mTotal").textContent = totalSpan.textContent + " руб.";
+      modal.classList.add("show");
+    });
+
+    document.getElementById("modalCancel").addEventListener("click", () => {
+      haptic();
+      modal.classList.remove("show");
+    });
+
+    document.getElementById("modalConfirm").addEventListener("click", () => {
+      haptic();
+      if (pendingPayload) {
+        tg.sendData(JSON.stringify(pendingPayload));
+      }
     });
   </script>
 </body>
